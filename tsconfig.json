@@ -9,8 +9,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
+    "module": "commonjs",
+    "target": "es2020",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -26,6 +26,10 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+
     // Style Options
     "noImplicitReturns": true,
     "noImplicitOverride": true,
@@ -37,11 +41,11 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "moduleResolution": "nodenext"
+    "moduleResolution": "Node"
   }
 }

@@ -5,8 +5,8 @@ import {
   signIn,
   signUp,
   logout,
-} from "../../controllers/auth.js";
-import { authorize } from "../../middleware/auth.js";
+} from "../../controllers/auth";
+import { authorize } from "../../middleware/auth";
 
 const router = express.Router();
 router.post("/sign-up", signUp);

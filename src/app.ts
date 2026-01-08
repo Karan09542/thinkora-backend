@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import router from "./routes/v1/index.js";
+import router from "./routes/v1/index";
 import {
   globalErrorhandleController,
   unHandleRoutesController,
 } from "./util/errorHandling.js";
-import { config } from "./config/index.js";
+import { config } from "./config/index";
 
 const app = express();
 

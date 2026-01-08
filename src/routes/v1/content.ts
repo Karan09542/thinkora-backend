@@ -4,8 +4,8 @@ import {
   generateContent,
   getChatSessionById,
   getChatSessions,
-} from "../../controllers/content.js";
-import { authorize } from "../../middleware/auth.js";
+} from "../../controllers/content";
+import { authorize } from "../../middleware/auth";
 
 const router = express.Router();
 router.post("/generate", authorize, generateContent);
