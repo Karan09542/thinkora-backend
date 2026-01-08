@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+
+*.env
+# typescript cached
+*.tsbuildinfo
+
+test.js
+perplexity_image_response.json
+perplexity_response.*
