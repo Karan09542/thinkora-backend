@@ -1,8 +1,8 @@
-import UserModel from "../models/user.js";
-import { AppError, status } from "../util/index.js";
-import catchAsync from "../util/catchAsync.js";
+import UserModel from "../models/user";
+import { AppError, status } from "../util/index";
+import catchAsync from "../util/catchAsync";
 import jwt from "jsonwebtoken";
-import { config } from "../config/index.js";
+import { config } from "../config/index";
 
 const signAccessToken = (_id: string) => {
   return jwt.sign({ _id }, config.jwtSecret, { expiresIn: "10s" });

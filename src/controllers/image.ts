@@ -1,9 +1,9 @@
 import { InferenceClient } from "@huggingface/inference";
-import catchAsync from "../util/catchAsync.js";
-import { AppError, status } from "../util/index.js";
-import { config } from "../config/index.js";
+import catchAsync from "../util/catchAsync";
+import { AppError, status } from "../util/index";
+import { config } from "../config/index";
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
-import Image from "../models/image.js";
+import Image from "../models/image";
 import mongoose from "mongoose";
 
 cloudinary.config({

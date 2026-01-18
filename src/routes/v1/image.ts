@@ -4,8 +4,8 @@ import {
   generateImage,
   getImageById,
   imageHistory,
-} from "../../controllers/image.js";
-import { authorize } from "../../middleware/auth.js";
+} from "../../controllers/image";
+import { authorize } from "../../middleware/auth";
 const router = express.Router();
 
 router.post("/generate", authorize, generateImage);

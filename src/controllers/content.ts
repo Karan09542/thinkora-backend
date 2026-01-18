@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import Content from "../models/content.js";
-import catchAsync from "../util/catchAsync.js";
-import { AppError, status } from "../util/index.js";
+import Content from "../models/content";
+import catchAsync from "../util/catchAsync";
+import { AppError, status } from "../util/index";
 
 import Perplexity from "@perplexity-ai/perplexity_ai";
-import { config } from "../config/index.js";
-import ChatSession from "../models/chatSession.js";
+import { config } from "../config/index";
+import ChatSession from "../models/chatSession";
 
 const ObjectId = mongoose.Types.ObjectId;
 const client = new Perplexity({ apiKey: config.perplexityApiKey });
