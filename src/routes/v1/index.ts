@@ -1,7 +1,7 @@
 import express from "express";
-import authRouter from "./auth";
-import imageRouter from "./image";
-import contentRouter from "./content";
+import authRouter from "./auth.js";
+import imageRouter from "./image.js";
+import contentRouter from "./content.js";
 
 const router = express.Router();
 router.use("/auth", authRouter);
