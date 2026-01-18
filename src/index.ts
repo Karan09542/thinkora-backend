@@ -2,6 +2,7 @@ import { connect } from "mongoose";
 import server from "./app.js";
 import { config } from "./config/index.js";
 
+const PORT = process.env.PORT || 3000;
 const DB_URL = config.databaseURL
   ? config.databaseURL?.replace("<db_password>", config.dbPassword as string)
   : "mongodb://localhost:27017/thinkora";
@@ -16,6 +17,8 @@ connect(DB_URL)
   });
 
 // Starting the server
-server.listen(config.port, () => {
-  console.log(`Server running on http://localhost:${config.port}`);
+server.listen(PORT, () => {
+  if (config.isDev) {
+    console.log(`Server running on http://localhost:${PORT}`);
+  }
 });

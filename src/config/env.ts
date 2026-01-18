@@ -2,7 +2,6 @@ import getEnv from "./validateEnv.js";
 
 export const ENV = {
   NODE_ENV: getEnv("NODE_ENV"),
-  PORT: getEnv("PORT"),
   DB_URL: getEnv("DB_URL"),
   DB_PASSWORD: getEnv("DB_PASSWORD"),
   JWT_SECRET: getEnv("JWT_SECRET"),

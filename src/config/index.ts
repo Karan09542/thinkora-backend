@@ -3,7 +3,6 @@ import { ENV } from "./env.js";
 export const config = {
   env: ENV.NODE_ENV,
   databaseURL: ENV.DB_URL,
-  port: ENV.PORT,
   dbPassword: ENV.DB_PASSWORD,
   jwtSecret: ENV.JWT_SECRET,
   frontendURL: ENV.FRONTEND_URL,
