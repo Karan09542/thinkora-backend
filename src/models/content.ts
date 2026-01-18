@@ -27,11 +27,11 @@ const contentSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["rewrite", "expand", "shorten", "article"],
+      enum: ["rewrite", "expand", "shorten", "article", "summary"],
       required: [true, "Content type is required"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Content = mongoose.model("content", contentSchema);

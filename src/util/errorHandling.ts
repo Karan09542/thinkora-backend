@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler, Response } from "express";
-import AppError from "./appError";
-import catchAsync from "./catchAsync";
-import { config } from "../config/index";
+import AppError from "./appError.js";
+import catchAsync from "./catchAsync.js";
+import { config } from "../config/index.js";
 
 export const unHandleRoutesController = catchAsync(async (req, res, _next) => {
   return res.status(404).json({

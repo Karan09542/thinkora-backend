@@ -1,6 +1,6 @@
 import { connect } from "mongoose";
-import server from "./app";
-import { config } from "./config/index";
+import server from "./app.js";
+import { config } from "./config/index.js";
 
 const DB_URL = config.databaseURL
   ? config.databaseURL?.replace("<db_password>", config.dbPassword as string)

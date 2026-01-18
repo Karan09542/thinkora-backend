@@ -1,4 +1,4 @@
-import getEnv from "./validateEnv";
+import getEnv from "./validateEnv.js";
 
 export const ENV = {
   NODE_ENV: getEnv("NODE_ENV"),

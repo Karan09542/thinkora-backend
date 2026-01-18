@@ -1,31 +1,91 @@
 import mongoose from "mongoose";
-import Content from "../models/content";
-import catchAsync from "../util/catchAsync";
-import { AppError, status } from "../util/index";
+import Content from "../models/content.js";
+import catchAsync from "../util/catchAsync.js";
+import { AppError, status } from "../util/index.js";
 
 import Perplexity from "@perplexity-ai/perplexity_ai";
-import { config } from "../config/index";
-import ChatSession from "../models/chatSession";
+import { config } from "../config/index.js";
+import ChatSession from "../models/chatSession.js";
 
 const ObjectId = mongoose.Types.ObjectId;
 const client = new Perplexity({ apiKey: config.perplexityApiKey });
+
+const SYSTEM_PROPMT_RULES = String.raw`
+1. Output must always be valid Markdown.
+2. Markdown must be fully compatible with react-markdown.
+3. Use headings, lists, bold, italics, and spacing for readability.
+4. Maintain the original intent and context of the user's content.
+5. Do not include HTML or unsupported Markdown syntax.
+6. Do not add explanations, system notes, or meta commentary.
+7. Use emojis only if the user explicitly allows them.
+8. If the user says “do not use emojis”, strictly avoid emojis.
+9. Adapt tone and style based on the user's input.
+10. The output MUST be clearly different in length and structure based on the selected category.
+11. Return only the final Markdown content.
+`;
+const SYSTEM_PROMPTS = {
+  rewrite: `
+Rewrite the content below.
+CONSTRAINTS:
+- Keep roughly the same length as the original.
+- Improve wording, grammar, and flow.
+- Sentence structure may change, meaning must NOT.
+- Do NOT add new details or remove existing ones.
+`,
+  expand: `
+Expand the content below.
+
+MANDATORY CONSTRAINTS:
+- Output MUST be at least 2–3× longer than the original.
+- Introduce NEW supporting details, explanations, or examples.
+- Split content into multiple paragraphs or bullet points if possible.
+- Do NOT repeat sentences using synonyms.
+- If expansion is not obvious, explain concepts in depth.
+`,
+  shorten: `
+Shorten the content below.
+
+MANDATORY CONSTRAINTS:
+- Reduce the content to 30–40% of its original length.
+- Remove secondary details, examples, and repetition.
+- Keep only the core message.
+- Output must feel significantly more concise.
+`,
+  article: `
+Write a complete article based on the content or topic below.
+
+MANDATORY STRUCTURE:
+- Use a title.
+- Use at least 3 sections with headings.
+- Each section must add new value.
+- Content must be clearly longer and more detailed than the input.
+`,
+  summary: `
+Summarize the content below.
+
+MANDATORY CONSTRAINTS:
+- Output must be no more than 5–7 bullet points OR one short paragraph.
+- Remove all examples and explanations.
+- Focus only on key conclusions or facts.
+`,
+};
 async function getContent(
   prompt: string,
-  category: string
+  category: keyof typeof SYSTEM_PROMPTS,
 ): Promise<{ content: string; response: string }> {
   const completion = await client.chat.completions.create({
     model: "sonar",
     messages: [
       {
         role: "system",
-        content:
-          "Your are a content creator AI model. Generate high quality content based on the user's prompt. Make sure the content is markdown formatted and engaging. and well supports react-markdown, use emojis to make content more interesting and if user said to don't use emojis then don't use",
+        content: SYSTEM_PROMPTS[category] + SYSTEM_PROPMT_RULES,
       },
       {
         role: "user",
-        content: `category: ${category}\nuser prompt: ${prompt}`,
+        content: prompt,
       },
     ],
+    num_search_results: 3,
   });
   const response = {
     content: completion.choices[0]?.message.content,
@@ -45,8 +105,16 @@ export const generateContent = catchAsync(async (req, res, next) => {
     next(
       new AppError(
         "Prompt and category are required",
-        status.HTTP_400_BAD_REQUEST
-      )
+        status.HTTP_400_BAD_REQUEST,
+      ),
+    );
+  }
+  if (!(category.toLowerCase() in SYSTEM_PROMPTS)) {
+    next(
+      new AppError(
+        `Category must be a valid enum: ${Object.keys(SYSTEM_PROMPTS)}, got ${category}`,
+        status.HTTP_400_BAD_REQUEST,
+      ),
     );
   }
 
@@ -70,15 +138,16 @@ export const generateContent = catchAsync(async (req, res, next) => {
     chat_id: chatId,
     prompt,
     output_content: content,
-    type: category,
+    type: category.toLowerCase(),
   });
+
   res.status(status.HTTP_200_SUCCESS).json({
     message: "success",
     ...(isChatId ? { content: content } : { chatId }),
   });
 });
 
-// getting all user sessions
+// getting chat user sessions
 export const getChatSessions = catchAsync(async (req, res, _next) => {
   const userId = req.userId;
 
@@ -97,9 +166,9 @@ export const getChatSessions = catchAsync(async (req, res, _next) => {
   const chatSessions = await ChatSession.find({
     user_id: new mongoose.Types.ObjectId(userId),
   })
+    .sort({ cratedAt: -1 })
     .skip(skip)
     .limit(limit)
-    .sort({ cratedAt: -1 })
     .select("-__v -updatedAt");
 
   res.status(status.HTTP_200_SUCCESS).json({
@@ -142,6 +211,7 @@ export const getChatSessionById = catchAsync(async (req, res, next) => {
         _id: 0,
         prompt: 1,
         content: "$output_content",
+        category: "$type",
       },
     },
   ]);

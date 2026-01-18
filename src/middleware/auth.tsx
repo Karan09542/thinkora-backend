@@ -1,8 +1,8 @@
-import { config } from "../config/index";
-import catchAsync from "../util/catchAsync";
-import { AppError, status } from "../util/index";
+import { config } from "../config/index.js";
+import catchAsync from "../util/catchAsync.js";
+import { AppError, status } from "../util/index.js";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/user";
+import UserModel from "../models/user.js";
 
 export const authorize = catchAsync(async (req, _res, next) => {
   let token = req.headers.authorization;

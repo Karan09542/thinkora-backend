@@ -14,5 +14,7 @@ const chatSessionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+chatSessionSchema.index({ createdAt: -1 });
+
 const ChatSession = mongoose.model("chatSession", chatSessionSchema);
 export default ChatSession;

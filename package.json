@@ -9,7 +9,6 @@
     "dev": "tsc -w"
   },
   "dependencies": {
-    "@google/genai": "^1.34.0",
     "@huggingface/inference": "^4.13.5",
     "@perplexity-ai/perplexity_ai": "^0.18.2",
     "bcrypt": "^6.0.0",
