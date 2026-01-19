@@ -3,7 +3,7 @@ import Content from "../models/content.js";
 import catchAsync from "../util/catchAsync.js";
 import { AppError, status } from "../util/index.js";
 
-import Perplexity from "@perplexity-ai/perplexity_ai";
+import { Perplexity } from "@perplexity-ai/perplexity_ai";
 import { config } from "../config/index.js";
 import ChatSession from "../models/chatSession.js";
 
@@ -72,7 +72,7 @@ MANDATORY CONSTRAINTS:
 async function getContent(
   prompt: string,
   category: keyof typeof SYSTEM_PROMPTS,
-): Promise<{ content: string; response: string }> {
+): Promise<{ content: string }> {
   const completion = await client.chat.completions.create({
     model: "sonar",
     messages: [
@@ -95,7 +95,6 @@ async function getContent(
   };
   return {
     content: (response.content as string) || "",
-    response: JSON.stringify(response),
   };
 }
 
