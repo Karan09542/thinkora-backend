@@ -17,8 +17,12 @@ connect(DB_URL)
   });
 
 // Starting the server
-server.listen(PORT, () => {
-  if (config.isDev) {
-    console.log(`Server running on http://localhost:${PORT}`);
-  }
-});
+if (process.env.VERCEL !== "1") {
+  server.listen(PORT, () => {
+    if (config.isDev) {
+      console.log(`Server running on http://localhost:${PORT}`);
+    }
+  });
+}
+
+export default server;
