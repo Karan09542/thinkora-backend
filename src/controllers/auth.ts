@@ -126,5 +126,5 @@ export const refreshToken = catchAsync(async (req, res, next) => {
 });
 
 export const logout = catchAsync(async (_req, res, _next) => {
-  res.clearCookie("refreshToken", { path: "/v1" }).sendStatus(204);
+  res.clearCookie("refreshToken").sendStatus(204);
 });

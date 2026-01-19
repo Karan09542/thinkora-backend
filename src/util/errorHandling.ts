@@ -33,12 +33,13 @@ export const globalErrorhandleController: ErrorRequestHandler = (
   err: AppError,
   _req,
   res,
-  _next
+  _next,
 ) => {
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal server error";
   err.status = err.status || "error";
-
+  console.log(_req.originalUrl);
+  console.log(err);
   if (config.isProd) {
     return sendProdError(err, res);
   }
