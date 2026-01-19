@@ -29,4 +29,4 @@ app.use("/v1", router);
 app.all("/*path", unHandleRoutesController);
 app.use(globalErrorhandleController);
 
-export default app;
+export {app as server};
