@@ -67,7 +67,6 @@ export const signIn = catchAsync(async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "none",
       secure: true,
-      path: "/v1",
     })
     .status(200)
     .json({ status: "success", user: { ...safeUser, token: accessToken } });
