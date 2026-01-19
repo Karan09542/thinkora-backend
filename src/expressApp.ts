@@ -16,10 +16,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use((req,_, next) => {
-  console.log(req.headers);
-  next()
-});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -32,4 +29,4 @@ app.use("/v1", router);
 app.all("/*path", unHandleRoutesController);
 app.use(globalErrorhandleController);
 
-export default app;
+export {app as server};

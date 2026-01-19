@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-import server from "./expressApp.js";
+import { server } from "./expressApp.js";
 import { config } from "./config/index.js";
 
 const PORT = process.env.PORT || 3000;
