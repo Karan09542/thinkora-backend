@@ -13,11 +13,13 @@ const app = express();
 app.use(
   cors({
     origin: config.frontendURL,
-    methods:["GET", "POST", "DELETE"],
     credentials: true,
   }),
 );
-app.options("*options", cors());
+app.use((req,_, next) => {
+  console.log(req.headers);
+  next()
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
