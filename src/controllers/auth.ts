@@ -40,13 +40,13 @@ export const signIn = catchAsync(async (req, res, next) => {
     return next(
       new AppError(
         "username and email are required",
-        status.HTTP_400_BAD_REQUEST
-      )
+        status.HTTP_400_BAD_REQUEST,
+      ),
     );
   }
 
   const user = await UserModel.findOne({ email }).select(
-    "+password -__v -createdAt -updatedAt"
+    "+password -__v -createdAt -updatedAt",
   );
   if (!user) {
     return next(new AppError("user not found", status.HTTP_404_NOT_FOUND));
@@ -54,7 +54,7 @@ export const signIn = catchAsync(async (req, res, next) => {
 
   if (!(await user.isCorrectPassword(password))) {
     return next(
-      new AppError("invalid credentials", status.HTTP_401_UNAUTHORIZED)
+      new AppError("invalid credentials", status.HTTP_401_UNAUTHORIZED),
     );
   }
 
@@ -67,6 +67,7 @@ export const signIn = catchAsync(async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "none",
       secure: true,
+      path: "/",
     })
     .status(200)
     .json({ status: "success", user: { ...safeUser, token: accessToken } });
@@ -101,20 +102,20 @@ export const refreshToken = catchAsync(async (req, res, next) => {
     return next(
       new AppError(
         "Invalid or expired token, generate a new one",
-        status.HTTP_400_BAD_REQUEST
-      )
+        status.HTTP_400_BAD_REQUEST,
+      ),
     );
   }
 
   const user = await UserModel.findById(decodedToken._id).select(
-    "-__v -createdAt -updatedAt"
+    "-__v -createdAt -updatedAt",
   );
   if (!user) {
     return next(
       new AppError(
         "Invalid token, user does not exist",
-        status.HTTP_400_BAD_REQUEST
-      )
+        status.HTTP_400_BAD_REQUEST,
+      ),
     );
   }
 
