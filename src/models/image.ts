@@ -15,18 +15,18 @@ const imageSchema = new mongoose.Schema(
       type: [Object],
       required: [true, "Image url is required"],
       validate: {
-        validator: (v:string[]) => v.length > 0,
-        message: "Provide at least one image url"
-      }
+        validator: (v: string[]) => v.length > 0,
+        message: "Provide at least one image url",
+      },
     },
     prompt: {
       type: String,
-      required: [true, "Image propmt is required"]
+      required: [true, "Image propmt is required"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
-
+imageSchema.index({ createdAt: -1 });
 const Image = mongoose.model("image", imageSchema);
 
 export default Image;

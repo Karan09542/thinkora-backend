@@ -38,6 +38,7 @@ export const globalErrorhandleController: ErrorRequestHandler = (
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal server error";
   err.status = err.status || "error";
+  console.log(err);
   if (config.isProd) {
     return sendProdError(err, res);
   }

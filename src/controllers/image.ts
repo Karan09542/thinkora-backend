@@ -23,7 +23,7 @@ type ImageURLS = {
 
 async function getImage(
   prompt: string,
-  resolution: { width: number; height: number }
+  resolution: { width: number; height: number },
 ): Promise<ImageURLS> {
   const client = new InferenceClient(config.hfToken);
 
@@ -50,7 +50,7 @@ async function uploadImage(buffer: Buffer): Promise<ImageURLS> {
             return resolve(uploadResult as UploadApiResponse);
           })
           .end(buffer);
-      }
+      },
     );
     return { url: uploadResult.secure_url, public_id: uploadResult.public_id };
   } catch (error) {
@@ -97,8 +97,8 @@ export const generateImage = catchAsync(async (req, res, next) => {
     imagePromises.push(
       getImage(
         prompt,
-        RESOLUTION_MAP[resolution] ?? RESOLUTION_MAP["1024x1024"]
-      )
+        RESOLUTION_MAP[resolution] ?? RESOLUTION_MAP["1024x1024"],
+      ),
     );
   }
   const urls = await Promise.all(imagePromises);
@@ -139,6 +139,9 @@ export const imageHistory = catchAsync(async (req, res, _next) => {
       $match: { user_id: new mongoose.Types.ObjectId(userId) },
     },
     {
+      $sort: { createdAt: -1 },
+    },
+    {
       $skip: skip,
     },
     {
@@ -162,11 +165,7 @@ export const imageHistory = catchAsync(async (req, res, _next) => {
         createdAt: 1,
       },
     },
-    {
-      $sort: { createdAt: -1 },
-    },
   ]);
-
   res.status(status.HTTP_200_SUCCESS).json({
     status: "success",
     images,
