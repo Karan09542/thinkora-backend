@@ -11,10 +11,10 @@ const chatSessionSchema = new mongoose.Schema(
       default: `New Chat ${new Date()}`,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-chatSessionSchema.index({ createdAt: -1 });
+chatSessionSchema.index({ updatedAt: -1 });
 
 const ChatSession = mongoose.model("chatSession", chatSessionSchema);
 export default ChatSession;

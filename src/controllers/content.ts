@@ -141,6 +141,12 @@ export const generateContent = catchAsync(async (req, res, next) => {
     type: category.toLowerCase(),
   });
 
+  if (chatId) {
+    await ChatSession.findByIdAndUpdate(new ObjectId(chatId), {
+      updatedAt: new Date(),
+    });
+  }
+
   res.status(status.HTTP_200_SUCCESS).json({
     message: "success",
     ...(isChatId ? { content: content } : { chatId }),
@@ -166,7 +172,7 @@ export const getChatSessions = catchAsync(async (req, res, _next) => {
   const chatSessions = await ChatSession.find({
     user_id: new mongoose.Types.ObjectId(userId),
   })
-    .sort({ cratedAt: -1 })
+    .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit)
     .select("-__v -updatedAt");
@@ -193,12 +199,13 @@ export const getChatSessionById = catchAsync(async (req, res, next) => {
   if (isNaN(limit) || limit <= 0) {
     limit = 10;
   }
-
   const skip = (page - 1) * limit;
-
   const chatSession = await Content.aggregate([
     {
       $match: { chat_id: new ObjectId(chatId) },
+    },
+    {
+      $sort: { createdAt: -1 },
     },
     {
       $skip: skip,
@@ -212,6 +219,7 @@ export const getChatSessionById = catchAsync(async (req, res, next) => {
         prompt: 1,
         content: "$output_content",
         category: "$type",
+        createdAt: 1,
       },
     },
   ]);

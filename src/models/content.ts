@@ -34,5 +34,7 @@ const contentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+contentSchema.index({ createdAt: -1 });
+
 const Content = mongoose.model("content", contentSchema);
 export default Content;
